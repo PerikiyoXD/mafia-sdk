@@ -1,0 +1,12 @@
+﻿  Main.cpp
+c:\users\dávid svitana\documents\visual studio 2017\projects\mafiasdk\mafiasdk\mafiasdk\game\c_human.hpp(148): warning C4409: illegal instruction size
+c:\users\dávid svitana\documents\visual studio 2017\projects\mafiasdk\mafiasdk\mafiasdk\game\c_human.hpp(207): warning C4409: illegal instruction size
+c:\users\dávid svitana\documents\visual studio 2017\projects\mafiasdk\mafiasdk\mafiasdk\game\c_human.hpp(324): warning C4409: illegal instruction size
+c:\users\dávid svitana\documents\visual studio 2017\projects\mafiasdk\mafiasdk\main.cpp(44): warning C4996: 'freopen': This function or variable may be unsafe. Consider using freopen_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  c:\program files (x86)\windows kits\10\include\10.0.14393.0\ucrt\stdio.h(242): note: see declaration of 'freopen'
+c:\users\dávid svitana\documents\visual studio 2017\projects\mafiasdk\mafiasdk\main.cpp(45): warning C4996: 'freopen': This function or variable may be unsafe. Consider using freopen_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  c:\program files (x86)\windows kits\10\include\10.0.14393.0\ucrt\stdio.h(242): note: see declaration of 'freopen'
+c:\users\dávid svitana\documents\visual studio 2017\projects\mafiasdk\mafiasdk\main.cpp(46): warning C4996: 'freopen': This function or variable may be unsafe. Consider using freopen_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  c:\program files (x86)\windows kits\10\include\10.0.14393.0\ucrt\stdio.h(242): note: see declaration of 'freopen'
+  MafiaSDK.vcxproj -> C:\Users\Dávid Svitana\Documents\Visual Studio 2017\Projects\MafiaSDK\Debug\MafiaSDK.dll
+  MafiaSDK.vcxproj -> C:\Users\Dávid Svitana\Documents\Visual Studio 2017\Projects\MafiaSDK\Debug\MafiaSDK.pdb (Partial PDB)
