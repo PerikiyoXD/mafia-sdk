@@ -86,14 +86,14 @@ namespace MafiaSDK
 		}
 
 
-		void Intern_UseCar(C_Car* car, int iSeatID)
+		void Intern_UseCar(C_Car* car, int seatID)
 		{
 			unsigned long funcAddress = C_Human_Enum::FunctionsAddresses::Intern_UseCar;
 			
 
 			__asm
 			{
-				push iSeatID
+				push seatID
 				push car
 				mov ecx, this
 				call funcAddress
@@ -103,12 +103,11 @@ namespace MafiaSDK
 		void Intern_FromCar(void)
 		{
 			unsigned long funcAddress = C_Human_Enum::FunctionsAddresses::Intern_FromCar;
-			unsigned long dwCarFrame = *(unsigned long*)((unsigned long)this->GetInterface()->playersCar + 0x68);
+			I3D_Frame* vehicleFrame  = *(I3D_Frame**)((unsigned long)this->GetInterface()->playersCar + 0x68);
 			
-
 			__asm
 			{
-				push dwCarFrame
+				push vehicleFrame
 				mov ecx, this
 				call funcAddress
 			}
@@ -118,7 +117,6 @@ namespace MafiaSDK
 		{
 			unsigned long funcAddress = C_Human_Enum::FunctionsAddresses::RepairWeaponPosition;
 			
-
 			__asm
 			{
 				mov ecx, this
@@ -130,7 +128,6 @@ namespace MafiaSDK
 		{
 			unsigned long funcAddress = C_Human_Enum::FunctionsAddresses::ChangeWeaponModel;
 			
-
 			__asm
 			{
 				mov ecx, this
@@ -138,30 +135,28 @@ namespace MafiaSDK
 			}
 		}
 
-		void Do_ChangeWeapon(int iWeaponId, bool bIdk)
+		void Do_ChangeWeapon(int weaponId, BOOL bool1)
 		{
 			unsigned long funcAddress = C_Human_Enum::FunctionsAddresses::Do_ChangeWeapon;
 			
-
 			__asm
 			{
-				push bIdk
-				push iWeaponId
+				push bool1
+				push weaponId
 				mov ecx, this
 				call funcAddress
 			}
 		}
 
-		void Do_PlayAnim(char* szAnimName)
+		void Do_PlayAnim( const char* animationName )
 		{
 			unsigned long funcAddress = C_Human_Enum::FunctionsAddresses::Do_PlayAnim;
 			
-
 			__asm
 			{
 				push 0
 				push 0
-				push szAnimName
+				push animationName
 				mov ecx, this
 				call funcAddress
 			}
@@ -179,32 +174,30 @@ namespace MafiaSDK
 			}
 		}
 
-		void Use_Actor(unsigned long dwActor, int iUnk1, int iUnk2, int iUnk3)
+		void Use_Actor(C_Actor* actor, int unk1, int unk2, int unk3)
 		{
 			unsigned long funcAddress = C_Human_Enum::FunctionsAddresses::Use_Actor;
 			
-
 			__asm
 			{
-				push iUnk3
-				push iUnk2
-				push iUnk1
-				push dwActor
+				push unk3
+				push unk2
+				push unk1
+				push actor
 				mov ecx, this
 				call funcAddress
 			}
 		}
 
-		void Do_Shoot(bool bFromCar, Vector3D vPos)
+		void Do_Shoot(BOOL fromCar, Vector3D vPos)
 		{
 			unsigned long funcAddress = C_Human_Enum::FunctionsAddresses::Do_Shoot;
 			
-
 			__asm
 			{
 				lea eax, vPos
 				push eax
-				push bFromCar
+				push fromCar
 				mov ecx, this
 				call funcAddress
 			}
@@ -214,7 +207,6 @@ namespace MafiaSDK
 		{
 			unsigned long funcAddress = C_Human_Enum::FunctionsAddresses::Do_ThrowGranade;
 			
-
 			__asm
 			{
 				lea eax, vPos
@@ -228,7 +220,6 @@ namespace MafiaSDK
 		{
 			unsigned long funcAddress = C_Human_Enum::FunctionsAddresses::Do_Reload;
 			
-
 			__asm
 			{
 				mov ecx, this
@@ -240,7 +231,6 @@ namespace MafiaSDK
 		{
 			unsigned long funcAddress = C_Human_Enum::FunctionsAddresses::Do_Holster;
 			
-
 			__asm
 			{
 				mov ecx, this
@@ -252,7 +242,6 @@ namespace MafiaSDK
 		{
 			unsigned long funcAddress = C_Human_Enum::FunctionsAddresses::Do_WeaponDrop;
 			
-
 			__asm
 			{
 				mov ecx, this
@@ -260,14 +249,13 @@ namespace MafiaSDK
 			}
 		}
 
-		void Do_ThrowCocotFromCar(C_Car * car, int iSeatId)
+		void Do_ThrowCocotFromCar(C_Car * car, int seatId)
 		{
 			unsigned long funcAddress = C_Human_Enum::FunctionsAddresses::Do_ThrowCocotFromCar;
 			
-
 			__asm
 			{
-				push iSeatId
+				push seatId
 				push car
 				mov ecx, this
 				call funcAddress
@@ -278,7 +266,6 @@ namespace MafiaSDK
 		{
 			unsigned long funcAddress = C_Human_Enum::FunctionsAddresses::EineMeineKleineAutoInLuft;
 			
-
 			__asm
 			{
 				push car
@@ -287,20 +274,20 @@ namespace MafiaSDK
 			}
 		}
 
-		void NewScream(unsigned int iScream)
+		void NewScream(unsigned int screamId)
 		{
 			unsigned long funcAddress = C_Human_Enum::FunctionsAddresses::NewScream;
 			
 
 			__asm
 			{
-				push iScream
+				push screamId
 				mov ecx, this
 				call funcAddress
 			}
 		}
 
-		void Intern_ChangeModel(char* szModelName)
+		void Intern_ChangeModel(const char* modelName)
 		{
 			unsigned long funcAddress = C_Human_Enum::FunctionsAddresses::Intern_ChangeModel;
 			
@@ -308,20 +295,20 @@ namespace MafiaSDK
 			__asm
 			{
 				push 0
-				push szModelName
+				push modelName
 				mov ecx, this
 				call funcAddress
 			}
 		}
 
-		void G_Inventory_Insert(S_GameItem newItem, bool bUnk)
+		void G_Inventory_Insert(S_GameItem newItem, BOOL unk)
 		{
 			unsigned long funcAddress = C_Human_Enum::FunctionsAddresses::G_Inventory_Insert;
 			G_Inventory* inventory = &this->GetInterface()->inventory;
 
 			__asm
 			{
-				push bUnk
+				push unk
 				lea eax, newItem
 				push eax
 				mov ecx, inventory
@@ -329,9 +316,9 @@ namespace MafiaSDK
 			}
 		}
 
-		S_GameItem* G_Inventory_AddWeapon(int iWeaponId, int iAmmoLoaded, int iAmmoHidden)
+		S_GameItem* G_Inventory_AddWeapon(int weaponId, int ammoLoaded, int ammoHidden)
 		{
-			S_GameItem newItem = { iWeaponId, iAmmoLoaded, iAmmoHidden, NULL };
+			S_GameItem newItem = { weaponId, ammoLoaded, ammoHidden, NULL };
 
 			this->G_Inventory_Insert(newItem, false);
 

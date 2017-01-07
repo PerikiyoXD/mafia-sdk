@@ -150,10 +150,10 @@ namespace MafiaSDK
 			}
 		}
 
-		/*void SetFrameRot( Vector4D vRotation )
+		void SetFrameRot( Vector4D vRotation )
 		{
 
-		}*/
+		}
 
 		void SetFrameScale(Vector3D & vScale)
 		{

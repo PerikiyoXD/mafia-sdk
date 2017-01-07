@@ -45,7 +45,8 @@ void debugFunction()
 	freopen("CONOUT$", "w", stdout);
 	freopen("CONOUT$", "w", stderr);
 
-	MafiaSDK::C_Mission* myPopiciMission = MafiaSDK::GetCurrentMission();
+
+	MafiaSDK::C_Mission* myPopiciMission = MafiaSDK::GetMission();
 
 	myPopiciMission->GetGame()->ScoreOn(true);
 	myPopiciMission->GetGame()->ScoreSet(500);

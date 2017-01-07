@@ -3,8 +3,9 @@
 
 namespace MafiaSDK
 {
-	struct C_Player_Interface
+	struct C_Player_Interface 
 	{
+		C_Human_Interface humanObject;
 	};
 
 	namespace C_Player_Enum
@@ -15,7 +16,7 @@ namespace MafiaSDK
 		};
 	};
 
-	class C_Player
+	class C_Player : C_Human
 	{
 	public:
 		C_Player_Interface* GetInterface()

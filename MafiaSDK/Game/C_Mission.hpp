@@ -20,7 +20,34 @@ namespace MafiaSDK
 	{
 		enum FunctionAddresses
 		{
-			CLASS_CMISSION = C_MISSION_CLASS
+			CLASS_CMISSION = C_MISSION_CLASS,
+			CreateActor = 0x53F7D0,
+			FindActorByName = 0x00540490
+		};
+
+		enum ObjectTypes
+		{
+			GhostObject = 1,
+			Player = 2,
+			Car = 4,
+			Script = 5,
+			Door = 6,
+			Trolley = 8,
+			SpecialIDK = 9,
+			TrafficSetup = 12,
+			PedestrianSetup = 18,
+			Unknown = 20,
+			Dog = 21,
+			Plane = 22,
+			RailRoute = 24,
+			Pumpar = 25,
+			Enemy = 27,
+			RaceCamera = 28,
+			Wagons = 30,
+			Clocks = 34,
+			Physical = 35,
+			Truck = 36,
+			InitScript = 155
 		};
 	}
 
@@ -41,6 +68,38 @@ namespace MafiaSDK
 		C_Game* GetGame()
 		{
 			return GetMissionInterface()->mGame;
+		}
+
+		C_Actor* CreateActor(C_Mission_Enum::ObjectTypes actorType)
+		{
+			C_Actor* returnActor = nullptr;
+			unsigned long funcAddress = C_Mission_Enum::FunctionAddresses::CreateActor;
+
+			__asm
+			{
+				mov ecx, this
+				push actorType
+				call funcAddress
+				mov returnActor, eax
+			}
+
+			return returnActor;
+		}
+
+		C_Actor* FindActorByName(const char* actorName)
+		{
+			C_Actor* returnActor = nullptr;
+			unsigned long funcAddress = C_Mission_Enum::FunctionAddresses::FindActorByName;
+
+			__asm
+			{
+				push actorName
+				mov ecx, this
+				call funcAddress
+				mov returnActor, eax
+			}
+
+			return returnActor;
 		}
 	};
 
