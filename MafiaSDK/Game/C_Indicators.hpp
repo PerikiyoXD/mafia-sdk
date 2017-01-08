@@ -14,7 +14,7 @@
 	limitations under the License.
 */
 
-#ifndef _CINIDCATORS_H_
+#ifndef _CINDICATORS_H_
 #define _CINDICATORS_H_
 
 namespace MafiaSDK
@@ -70,7 +70,7 @@ namespace MafiaSDK
 			}
 		}
 
-		void FadeInOutScreen(bool fadeScreen, int time)
+		void FadeInOutScreen(BOOL fadeScreen, int time)
 		{
 			unsigned long funcAddress = C_Indicators_Enum::FunctionsAddresses::FadeInOut;
 
@@ -84,7 +84,7 @@ namespace MafiaSDK
 			}
 		}
 
-		void MapEnable(bool enable)
+		void MapEnable(BOOL enable)
 		{
 			unsigned long funcAddress = C_Indicators_Enum::FunctionsAddresses::MapEnable;
 

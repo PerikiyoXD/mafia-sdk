@@ -34,12 +34,15 @@ namespace MafiaSDK
 
 	namespace C_Game_Hooks
 	{
+		void HookOnGameTick(std::function<void()> funcitonPointer);
+		void HookOnGameInit(std::function<void()> funcitonPointer);
+
+#ifdef MAFIA_SDK_IMPLEMENTATION
 		namespace FunctionsPointers
 		{
 			std::function<void()> gameTick;
 			std::function<void()> gameInit;
 		};
-
 		namespace Functions
 		{
 			inline void GameTick()
@@ -57,45 +60,45 @@ namespace MafiaSDK
 
 		namespace NakedFunctions
 		{
-			__declspec(naked) void Tick()
+			__declspec(naked) void GameTick()
 			{
 				__asm
 				{
 					pushad
-						call Functions::GameTick
+					call Functions::GameTick
 					popad
 
 					retn 4
 				}
 			}
-
-			__declspec(naked) void Init()
+			
+			__declspec(naked) void GameInit()
 			{
 				__asm
 				{
 					pushad
-						call Functions::GameInit
+					call Functions::GameInit
 					popad
 
 					retn
 				}
 			}
-
 		};
 
-		inline void HookOnGameStart(std::function<void()> funcitonPointer)
+		inline void HookOnGameTick(std::function<void()> funcitonPointer)
 		{
 			FunctionsPointers::gameTick = funcitonPointer;
 
-			InstallJmpHook(0x005BE93A, (unsigned long)&NakedFunctions::Tick);
+			MemoryPatcher::InstallJmpHook(0x005A6D40, (unsigned long)&NakedFunctions::GameTick);
 		}
 
 		inline void HookOnGameInit(std::function<void()> functionPointer) 
 		{
 			FunctionsPointers::gameInit = functionPointer;
 
-			InstallJmpHook(0x005A395B, (unsigned long)&NakedFunctions::Init);
+			MemoryPatcher::InstallJmpHook(0x005A395B, (unsigned long)&NakedFunctions::GameInit);
 		}
+		#endif
 	};
 
 	class C_Game
@@ -119,6 +122,23 @@ namespace MafiaSDK
 		C_Player* GetLocalPlayer()
 		{
 			return this->GetInterface()->mLocalPlayer;
+		}
+		
+		void SetLocalPlayer( C_Player* player)
+		{
+			this->GetInterface()->mLocalPlayer = player;
+		}
+
+		void AddTemporaryActor(C_Actor* actor)
+		{
+			unsigned long funcAddress = C_Game_Enum::FunctionAddresses::AddTemporaryActor;
+
+			__asm
+			{
+				push actor
+				mov ecx, this
+				call funcAddress
+			}
 		}
 		
 		void SetTrafficVisible(BOOL toggle)

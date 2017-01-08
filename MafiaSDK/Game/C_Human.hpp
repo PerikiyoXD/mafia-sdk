@@ -77,7 +77,7 @@ namespace MafiaSDK
 		};
 	};
 
-	class C_Human
+	class C_Human : public C_Actor
 	{
 	public:
 		C_Human_Interface* GetInterface()

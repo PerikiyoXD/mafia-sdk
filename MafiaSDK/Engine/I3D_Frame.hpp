@@ -67,12 +67,13 @@ namespace MafiaSDK
 
 			__asm
 			{
+				mov esi, this
 				push 0
 				push 0
 				push 0
 				push 0
 				push modelName
-				push this
+				push esi
 				mov ecx, cacheBlockOpenModel
 				call cacheBlockCreateModel
 

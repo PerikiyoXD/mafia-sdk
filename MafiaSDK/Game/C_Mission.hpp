@@ -14,6 +14,9 @@
 	limitations under the License.
 */
 
+#ifndef _CMISSION_H_
+#define _CMISSION_H_
+
 namespace MafiaSDK
 {
 	namespace C_Mission_Enum
@@ -103,8 +106,10 @@ namespace MafiaSDK
 		}
 	};
 
-	C_Mission* GetMission()
+	inline C_Mission* GetMission()
 	{
 		return *reinterpret_cast<C_Mission**>(C_Mission_Enum::FunctionAddresses::CLASS_CMISSION);
 	}
 }
+
+#endif

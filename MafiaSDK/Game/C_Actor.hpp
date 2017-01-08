@@ -22,12 +22,15 @@ namespace MafiaSDK
 {
 	struct C_Actor_Interface
 	{
-
+		int a; // nesmie byt prazdne tvl
 	};
 
-	enum C_Actor_FunctionsAddresses
+	namespace C_Actor_Enum
 	{
-
+		enum FunctionAddresses
+		{
+			Activate = 0x47AFE0
+		};
 	};
 
 	class C_Actor
@@ -36,6 +39,31 @@ namespace MafiaSDK
 		C_Actor_Interface* GetInterface()
 		{
 			return reinterpret_cast<C_Actor_Interface*>(this);
+		}
+
+		void Init( I3D_Frame* frame )
+		{
+			__asm
+			{
+				mov edi, this
+				mov esi, frame
+				mov eax, dword ptr[edi]
+				mov ecx, edi
+				push esi
+				call dword ptr[eax + 48h]	
+			}
+		}
+
+		void SetActive( BOOL active )
+		{
+			unsigned long funcAddress = C_Actor_Enum::FunctionAddresses::Activate;
+			__asm
+			{
+				mov ecx, this
+				push active
+				call funcAddress
+			}
+
 		}
 	};
 };

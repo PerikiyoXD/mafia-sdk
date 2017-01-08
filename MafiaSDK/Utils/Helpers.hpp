@@ -15,31 +15,13 @@
 // Constants
 #define C_MISSION_CLASS 0x063788C
 
-static void InstallJmpHook(DWORD address, DWORD function)
+struct Vector3D
 {
-	DWORD lpflOldProtect;
-	VirtualProtect((void*)address, 5, PAGE_EXECUTE_READWRITE, &lpflOldProtect);
-	*(BYTE*)(address) = 0xE9;
-	*(DWORD*)(address + 1) = (unsigned long)function - (address + 5);
-	VirtualProtect((void*)address, 5, lpflOldProtect, &lpflOldProtect);
-}
-
-
-
-//TODO(Davo): Normal implementation needed
-struct Vector3D 
-{
-	float x;
-	float y;
-	float z;
+	float x, y, z;
 };
-
 struct Vector4D
 {
-	float x;
-	float y;
-	float z;
-	float w;
+	float x, y, z, w;
 };
 
 class S_GameItem

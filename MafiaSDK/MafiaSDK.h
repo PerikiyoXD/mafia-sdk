@@ -1,9 +1,11 @@
-#pragma once 
+#ifndef _MAFIA_SDK_
+#define _MAFIA_SDK_
 
 #include <Windows.h>
 #include <functional>
 
-#include "Helpers.hpp"
+#include "Utils/Helpers.hpp"
+#include "Utils/MemoryPatcher.h"
 
 #include "Engine/I3D_Frame.hpp"
 
@@ -17,3 +19,5 @@
 #include "Game/C_Indicators.hpp"
 #include "Game/C_Game.hpp"
 #include "Game/C_Mission.hpp"
+
+#endif
