@@ -106,6 +106,11 @@ namespace MafiaSDK
 			return reinterpret_cast<C_Game_Interface*>(this);
 		}
 
+		C_Indicators* GetIndicators()
+		{
+			return reinterpret_cast<C_Indicators*>(C_Indicators_Enum::GIndicators);
+		}
+
 		C_Camera* GetCamera()
 		{
 			return &this->GetInterface()->mCamera;

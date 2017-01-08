@@ -57,6 +57,7 @@ void debugFunction()
 	Vector3D rot = { 0.0f, 0.0f, 0.0f };
 
 	myCam->LezeDoToyoty(true);
+	myPopiciMission->GetGame()->GetIndicators()->ConsoleAddText("Hello from SDK", 0xFF000000);
 	//printf("Game: %X - Our Game: %X\n", game, (DWORD)mafiaInterface->mGame->GetInterface()->mCamera);
 	//printf("Is score on: %d\n Score value: %d\n", mafiaInterface->mGame->GetInterface()->mIsScoreEnabled, mafiaInterface->mGame->GetInterface()->mIsScoreEnabled);
 }

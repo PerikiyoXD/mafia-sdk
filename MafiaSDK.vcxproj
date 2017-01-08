@@ -148,6 +148,7 @@
     <ClInclude Include="MafiaSDK\Game\C_Entity.hpp" />
     <ClInclude Include="MafiaSDK\Game\C_Game.hpp" />
     <ClInclude Include="MafiaSDK\Game\C_Human.hpp" />
+    <ClInclude Include="MafiaSDK\Game\C_Indicators.hpp" />
     <ClInclude Include="MafiaSDK\Game\C_Mission.hpp" />
     <ClInclude Include="MafiaSDK\Game\C_ParticleManager.hpp" />
     <ClInclude Include="MafiaSDK\Game\C_Player.hpp" />
