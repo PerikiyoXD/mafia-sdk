@@ -3,7 +3,6 @@
 #include <Windows.h>
 #include <functional>
 
-
 #include "Helpers.hpp"
 
 #include "Engine/I3D_Frame.hpp"
