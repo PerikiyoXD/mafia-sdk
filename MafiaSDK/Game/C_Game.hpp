@@ -140,6 +140,18 @@ namespace MafiaSDK
 				call funcAddress
 			}
 		}
+
+		void RemoveTemporaryActor(C_Actor* actor)
+		{
+			unsigned long funcAddress = C_Game_Enum::FunctionAddresses::RemoveTemporaryActor;
+
+			__asm
+			{
+				push actor
+				mov ecx, this
+				call funcAddress
+			}
+		}
 		
 		void SetTrafficVisible(BOOL toggle)
 		{
