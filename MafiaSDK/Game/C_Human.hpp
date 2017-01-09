@@ -75,6 +75,20 @@ namespace MafiaSDK
 			G_Inventory_Insert = 0x6092B0,
 			G_Inventory_Remove	= 0x6095E0
 		};
+
+		//Thanks for DjBozkosz Documentation
+		enum BehaviorStates : byte
+		{
+			ReactsAll = 0, //Reacts on attacks, shots. Ducks only, moves away if char was hit multiple times – Duck.
+			ReactsAllUnknown = 1, //Reacts on attacks, shots. Ducks only, moves away if char was hit multiple times – ???
+			DoesntReactGuard = 2, //Does not react to anything. Guards the player – No reaction.
+			DoesntReactOnWeapon = 4, //Does not react on anything – No reaction on weapon.
+			ReactsPlayerOnHit = 8, //Reacts on player only, Attacks player – React when hit.
+			ReactsPlayerMovesAway = 16, //Reacts on player, Moves away – Reaction on Player.
+			ReactsOnAttacksAwayOrAttack = 32, //Reacts on attacks to other characters. He either moves away or attacks attacker – React on Attack.
+			ReactsOnAttacksAttack = 64, //Reacts on attacks to other characters. Attacks attacker – React on Attack 2. 
+			ProgrammedReacts = 128 //Used for Little Joe in mission 9 programmed reactions, can add a little variety to non gangster characters – Afra
+		};
 	};
 
 	class C_Human : public C_Actor
@@ -85,6 +99,16 @@ namespace MafiaSDK
 			return reinterpret_cast<C_Human_Interface*>(this);
 		}
 
+		void SetBehavior(C_Human_Enum::BehaviorStates behavior)
+		{
+			/*__asm
+			{
+				mov ecx, this
+				mov ax, behavior
+				mov byte ptr ds : [ ecx + 0x5FC ], ax
+			}*/
+			*(byte*)(this + 0x5FC) = behavior;
+		}
 
 		void Intern_UseCar(C_Car* car, int seatID)
 		{
