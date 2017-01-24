@@ -19,6 +19,8 @@
 #include "Game/C_Indicators.hpp"
 #include "Game/C_Game.hpp"
 #include "Game/C_Bottle.hpp"
+#include "Game/C_Program.hpp"
+#include "Game/C_Detector.hpp"
 #include "Game/C_Mission.hpp"
 
 #endif

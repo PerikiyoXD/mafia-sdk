@@ -14,56 +14,48 @@
 	limitations under the License.
 */
 
-
-#ifndef _CACTOR_H_
-#define _CACTOR_H_
+#ifndef _CDETECTOR_H_
+#define _CDETECTOR_H_
 
 namespace MafiaSDK
 {
-	struct C_Actor_Interface
+	struct C_Detector_Interface
 	{
-		C_Entity_Interface entity;
+		PADDING(C_Detector_Interface, _pad0, 0x70);
+		C_Program mProgram;
 	};
 
-	namespace C_Actor_Enum
+	namespace C_Detector_Enum
 	{
 		enum FunctionAddresses
 		{
-			Activate = 0x47AFE0
+			CreateColls = 0x004330B0
 		};
 	};
 
-	class C_Actor
+	class C_Detector : public C_Actor
 	{
 	public:
-		C_Actor_Interface* GetInterface()
+		C_Detector_Interface* GetInterface()
 		{
-			return reinterpret_cast<C_Actor_Interface*>(this);
+			return reinterpret_cast<C_Detector_Interface*>(this);
 		}
-
-		void Init( I3D_Frame* frame )
+		
+		C_Program* GetProgram() 
 		{
+			return &this->GetInterface()->mProgram;
+		}
+		
+		void CreateColls(BOOL createColls)
+		{
+			unsigned long funcAddress = C_Detector_Enum::FunctionAddresses::CreateColls;
+
 			__asm
 			{
-				mov edi, this
-				mov esi, frame
-				mov eax, dword ptr[edi]
-				mov ecx, edi
-				push esi
-				call dword ptr[eax + 48h]	
-			}
-		}
-
-		void SetActive( BOOL active )
-		{
-			unsigned long funcAddress = C_Actor_Enum::FunctionAddresses::Activate;
-			__asm
-			{
+				push createColls
 				mov ecx, this
-				push active
 				call funcAddress
 			}
-
 		}
 	};
 };

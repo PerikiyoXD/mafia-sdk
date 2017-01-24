@@ -14,56 +14,41 @@
 	limitations under the License.
 */
 
-
-#ifndef _CACTOR_H_
-#define _CACTOR_H_
+#ifndef _CPROGRAM_H_
+#define _CPROGRAM_H_
 
 namespace MafiaSDK
 {
-	struct C_Actor_Interface
+	struct C_Program_Interface
 	{
-		C_Entity_Interface entity;
 	};
 
-	namespace C_Actor_Enum
+	namespace C_Program_Enum
 	{
 		enum FunctionAddresses
 		{
-			Activate = 0x47AFE0
+			SetSourceCode = 0x00461530
 		};
 	};
 
-	class C_Actor
+	class C_Program
 	{
 	public:
-		C_Actor_Interface* GetInterface()
+		C_Program_Interface* GetInterface()
 		{
-			return reinterpret_cast<C_Actor_Interface*>(this);
+			return reinterpret_cast<C_Program_Interface*>(this);
 		}
-
-		void Init( I3D_Frame* frame )
+		
+		void SetSourceCode(const char* sourceCode)
 		{
+			unsigned long funcAddress = C_Program_Enum::FunctionAddresses::SetSourceCode;
+			
 			__asm
 			{
-				mov edi, this
-				mov esi, frame
-				mov eax, dword ptr[edi]
-				mov ecx, edi
-				push esi
-				call dword ptr[eax + 48h]	
-			}
-		}
-
-		void SetActive( BOOL active )
-		{
-			unsigned long funcAddress = C_Actor_Enum::FunctionAddresses::Activate;
-			__asm
-			{
+				push sourceCode
 				mov ecx, this
-				push active
 				call funcAddress
 			}
-
 		}
 	};
 };

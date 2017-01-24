@@ -33,7 +33,7 @@ namespace MafiaSDK
 			GhostObject = 1,
 			Player = 2,
 			Car = 4,
-			Script = 5,
+			Detector = 5,
 			Door = 6,
 			Trolley = 8,
 			SpecialIDK = 9,
