@@ -37,6 +37,7 @@ namespace MafiaSDK
 			Door = 6,
 			Trolley = 8,
 			SpecialIDK = 9,
+			Bottle = 10,
 			TrafficSetup = 12,
 			PedestrianSetup = 18,
 			Unknown = 20,

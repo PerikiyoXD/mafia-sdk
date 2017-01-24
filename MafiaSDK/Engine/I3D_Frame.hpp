@@ -98,7 +98,7 @@ namespace MafiaSDK
 		void SetFramePos(Vector3D vPostion)
 		{
 			unsigned long funcAddr = I3D_Frame_Enum::FunctionsAddresses::SetPos;
-			unsigned long missionAddr = C_MISSION_CLASS;
+		
 
 			DWORD dwFunc2 = 0x0047AD10;
 			DWORD dwFunc3 = 0x0047A6C0;
@@ -140,7 +140,7 @@ namespace MafiaSDK
 				jnz end
 
 				jump :
-				mov ecx, dword ptr ds : [missionAddr]
+				mov ecx, dword ptr ds : [C_MISSION_CLASS]
 					mov edx, this
 					push edx
 					call dwFunc5

@@ -18,6 +18,7 @@
 #include "Game/C_Camera.hpp"
 #include "Game/C_Indicators.hpp"
 #include "Game/C_Game.hpp"
+#include "Game/C_Bottle.hpp"
 #include "Game/C_Mission.hpp"
 
 #endif
