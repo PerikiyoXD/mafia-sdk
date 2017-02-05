@@ -124,7 +124,22 @@ namespace MafiaSDK
 			return this->GetInterface()->mLocalPlayer;
 		}
 		
-		void SetLocalPlayer( C_Player* player)
+		C_BloodManager* GetBloodManager()
+		{
+			/*unsigned long returnInstace = NULL;
+			
+			__asm
+			{
+				mov ecx, this
+				add ecx, 0x2D90
+				mov returnInstace, ecx
+			}
+			*/
+
+			return reinterpret_cast<C_BloodManager*>((unsigned long)this + 0x2D90);
+		}
+		
+		void SetLocalPlayer(C_Player* player)
 		{
 			this->GetInterface()->mLocalPlayer = player;
 		}

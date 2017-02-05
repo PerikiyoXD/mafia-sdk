@@ -32,7 +32,8 @@ namespace MafiaSDK
 			CacheBlock_OpenModel = 0x647DD0,
 			CacheBlock_CreateModel = 0x4087E0,
 			SetScale = 0x0047A750,
-			SetPos = 0x00460980
+			SetPos = 0x00460980,
+			SetRot = 0x0043BCE0
 		};
 	};
 
@@ -151,9 +152,18 @@ namespace MafiaSDK
 			}
 		}
 
-		void SetFrameRot( Vector4D vRotation )
+		void SetFrameRot( Vector4D & vRotation)
 		{
+			unsigned long addressFunc = I3D_Frame_Enum::FunctionsAddresses::SetRot;
 
+			__asm
+			{
+				push vRotation
+				mov ecx, this
+				call addressFunc
+			}
+
+			Update();
 		}
 
 		void SetFrameScale(Vector3D & vScale)
