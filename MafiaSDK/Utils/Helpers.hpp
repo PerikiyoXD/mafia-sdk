@@ -14,6 +14,7 @@
 
 // Constants
 #define C_MISSION_CLASS 0x063788C
+#define LS3D_Alloc 0x1008D510
 
 struct Vector3D
 {

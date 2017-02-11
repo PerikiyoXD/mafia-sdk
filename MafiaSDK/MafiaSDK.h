@@ -7,7 +7,10 @@
 #include "Utils/Helpers.hpp"
 #include "Utils/MemoryPatcher.h"
 
+#include "Engine/ITexture.hpp"
 #include "Engine/I3D_Frame.hpp"
+#include "Engine/I3D_Projector.hpp"
+
 
 #include "Game/C_Entity.hpp"
 #include "Game/C_Actor.hpp"
