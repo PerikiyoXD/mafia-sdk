@@ -10,7 +10,8 @@
 #include "Engine/ITexture.hpp"
 #include "Engine/I3D_Frame.hpp"
 #include "Engine/I3D_Projector.hpp"
-
+#include "Engine/I3D_Light.hpp"
+#include "Engine/I3D_Sector.hpp"
 
 #include "Game/C_Entity.hpp"
 #include "Game/C_Actor.hpp"

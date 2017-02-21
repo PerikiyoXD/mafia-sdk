@@ -82,24 +82,28 @@ namespace MafiaSDK
 				test eax, eax
 				jnz CCache
 
-				// CCache spawn
-				push esi
-				mov ecx, dword ptr[esi]
-				call dword ptr[ecx + 28h]
-
-				mov ecx, dword ptr[esi]
-				push esi
-				call dword ptr[ecx + 18h]
-
-				sub esp, 4
+				sub esp, 0x4
 				CCache:
+			}
+
+			UpdateMatrix();
+		}
+
+		void UpdateMatrix()
+		{
+			__asm
+			{
+				mov eax, this
+				push eax
+				mov ecx, dword ptr ds : [eax]
+				call dword ptr[ecx + 0x18]
 			}
 		}
 
-		void SetFramePos(Vector3D vPostion)
+		void SetPos(Vector3D vPostion)
 		{
 			unsigned long funcAddr = I3D_Frame_Enum::FunctionsAddresses::SetPos;
-		
+
 
 			DWORD dwFunc2 = 0x0047AD10;
 			DWORD dwFunc3 = 0x0047A6C0;
@@ -119,7 +123,7 @@ namespace MafiaSDK
 				mov eax, this
 				push eax
 				mov ecx, dword ptr ds : [eax]
-				call dword ptr [ ecx + 0x18 ]
+				call dword ptr[ecx + 0x18]
 
 				//Get some offset
 				mov ecx, this
@@ -152,7 +156,7 @@ namespace MafiaSDK
 			}
 		}
 
-		void SetFrameRot( Vector4D & vRotation)
+		void SetRot(Vector4D & vRotation)
 		{
 			unsigned long addressFunc = I3D_Frame_Enum::FunctionsAddresses::SetRot;
 
@@ -163,10 +167,10 @@ namespace MafiaSDK
 				call addressFunc
 			}
 
-			Update();
+			UpdateMatrix();
 		}
 
-		void SetFrameScale(Vector3D & vScale)
+		void SetScale(Vector3D & vScale)
 		{
 			unsigned long addressFunc = I3D_Frame_Enum::FunctionsAddresses::SetScale;
 
@@ -177,21 +181,33 @@ namespace MafiaSDK
 				call addressFunc
 			}
 
-			Update();
+			UpdateMatrix();
 		}
-	private:
-		void Update()
-		{
 
+		void SetOn(BOOL isOn)
+		{
 			__asm
 			{
-				mov eax, this
-				push eax
-				mov ecx, dword ptr ds : [eax]
-				call dword ptr[ecx + 0x18]
+				mov edi, this
+				mov eax, dword ptr ds : [edi]
+				push isOn
+				push edi
+				call dword ptr ds : [eax + 0x24]
+			}
+		}
+
+		void SetName(const char* frameName)
+		{
+			__asm
+			{
+				mov edi, this
+				mov eax, dword ptr ds : [edi]
+				push frameName
+				push edi
+				call dword ptr ds : [eax + 0x28]
 			}
 		}
 	};
-};
+}
 
 #endif

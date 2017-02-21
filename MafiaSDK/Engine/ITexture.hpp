@@ -1,5 +1,5 @@
 /*
-	Copyright 2017 Dï¿½vid Svitana
+	Copyright 2017 Dávid Svitana
 
 	Licensed under the Apache License, Version 2.0 (the "License");
 	you may not use this file except in compliance with the License.
@@ -94,6 +94,7 @@ namespace MafiaSDK
 			call dword ptr ds : [ecx + 0x8]
 		}
 
+		__asm mov dword ptr ds : [0x101C5638], 0x17
 	}
 
 		void Close()

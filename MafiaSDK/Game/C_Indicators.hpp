@@ -34,7 +34,9 @@ namespace MafiaSDK
 			WideScreenSetRatio = 0x5FA050,
 			FadeInOut = 0x5FA370,
 			MapEnable = 0x5F9D10,
-			PlayerSetWingmanLives = 0x5F88E0
+			PlayerSetWingmanLives = 0x5F88E0,
+			OutText = 0x00604700,
+			TextSize = 0x006036D0
 		};
 	};
 
@@ -104,6 +106,41 @@ namespace MafiaSDK
 			{
 				push color
 				push text
+				mov ecx, this
+				call funcAddress
+			}
+		}
+		
+		void OutText(const char* text, float x, float y, float width, float height, int color, int underlined, int fontType)
+		{
+			unsigned long funcAddress = C_Indicators_Enum::FunctionsAddresses::OutText;
+			
+			__asm
+			{
+				push fontType
+				push underlined
+				push color
+				push height
+				push width
+				push y
+				push x
+				push text
+				mov ecx, this
+				call funcAddress
+			}
+		}
+
+		float TextSize(const char* text, float scale, int unk1, int unk2)
+		{
+			unsigned long funcAddress = C_Indicators_Enum::FunctionsAddresses::TextSize;
+
+			__asm
+			{
+				push unk2
+				push unk1
+				push scale
+				push text
+
 				mov ecx, this
 				call funcAddress
 			}
