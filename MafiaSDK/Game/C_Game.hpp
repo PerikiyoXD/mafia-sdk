@@ -28,7 +28,8 @@ namespace MafiaSDK
 			ScoreEnabled = 0x5B9FA0, 
 			SetScore = 0x5B9FE0,
 			AddTemporaryActor = 0x5A77C0,
-			RemoveTemporaryActor = 0x5A79A0
+			RemoveTemporaryActor = 0x5A79A0,
+			SetCamerRotRepair = 0x005BA010
 		};
 	};
 
@@ -36,13 +37,16 @@ namespace MafiaSDK
 	{
 		void HookOnGameTick(std::function<void()> funcitonPointer);
 		void HookOnGameInit(std::function<void()> funcitonPointer);
+		void HookOnLocalPlayerFallDown(std::function<void()> functionPointer);
 
 #ifdef MAFIA_SDK_IMPLEMENTATION
 		namespace FunctionsPointers
 		{
 			std::function<void()> gameTick;
 			std::function<void()> gameInit;
+			std::function<void()> localPlayerFallDown;
 		};
+		
 		namespace Functions
 		{
 			inline void GameTick()
@@ -55,6 +59,12 @@ namespace MafiaSDK
 			{
 				if (FunctionsPointers::gameInit != nullptr)
 					FunctionsPointers::gameInit();
+			}
+
+			inline void LocalPlayerFallDown()
+			{
+				if (FunctionsPointers::localPlayerFallDown != nullptr)
+					FunctionsPointers::localPlayerFallDown();
 			}
 		};
 
@@ -83,6 +93,20 @@ namespace MafiaSDK
 					retn
 				}
 			}
+
+			__declspec(naked) void LocalPlayerFallDown()
+			{
+				__asm
+				{
+					pushad
+						call Functions::LocalPlayerFallDown
+					popad
+
+					// 0x0057BAB1
+					mov eax, 0x005A545D
+					jmp eax
+				}
+			}
 		};
 
 		inline void HookOnGameTick(std::function<void()> funcitonPointer)
@@ -98,7 +122,13 @@ namespace MafiaSDK
 
 			MemoryPatcher::InstallJmpHook(0x005A395B, (unsigned long)&NakedFunctions::GameInit);
 		}
-		#endif
+
+		inline void HookLocalPlayerFallDown(std::function<void()> functionPointer)
+		{
+			FunctionsPointers::localPlayerFallDown = functionPointer;
+			MemoryPatcher::InstallJmpHook(0x005A543B, (unsigned long)&NakedFunctions::LocalPlayerFallDown);
+		}
+#endif
 	};
 
 	class C_Game
@@ -126,16 +156,6 @@ namespace MafiaSDK
 		
 		C_BloodManager* GetBloodManager()
 		{
-			/*unsigned long returnInstace = NULL;
-			
-			__asm
-			{
-				mov ecx, this
-				add ecx, 0x2D90
-				mov returnInstace, ecx
-			}
-			*/
-
 			return reinterpret_cast<C_BloodManager*>((unsigned long)this + 0x2D90);
 		}
 		
@@ -151,6 +171,17 @@ namespace MafiaSDK
 			__asm
 			{
 				push actor
+				mov ecx, this
+				call funcAddress
+			}
+		}
+
+		void SetCameraRotRepair()
+		{
+			unsigned long funcAddress = C_Game_Enum::FunctionAddresses::SetCamerRotRepair;
+
+			__asm
+			{
 				mov ecx, this
 				call funcAddress
 			}

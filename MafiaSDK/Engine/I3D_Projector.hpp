@@ -2,7 +2,7 @@
 	Copyright 2017 Dávid Svitana
 
 	Licensed under the Apache License, Version 2.0 (the "License");
-	you may not use this file except in compliance with the License.
+	you may not use this->mCurrentInstance file except in compliance with the License.
 	You may obtain a copy of the License at
 
 	http://www.apache.org/licenses/LICENSE-2.0
@@ -37,13 +37,14 @@ namespace MafiaSDK
 	public:
 		I3D_Projector_Interface* GetInterface()
 		{
-			return reinterpret_cast<I3D_Projector_Interface*>(this);
+			return reinterpret_cast<I3D_Projector_Interface*>(this->mCurrentInstance);
 		}
 
 		I3D_Projector()
 		{
 			unsigned long funcAddress = I3D_Projector_Enum::FunctionsAddresses::Construct;
 			unsigned long funcLS3DAlloc = LS3D_Alloc;
+			unsigned long returnInstance = NULL;
 			
 			__asm
 			{
@@ -53,22 +54,28 @@ namespace MafiaSDK
 
 				mov ecx, eax
 				call funcAddress
-				mov this, eax
+				mov returnInstance, eax
 			}
+			
+			this->mCurrentInstance = returnInstance;
 		}
 		
 		void SetTexture(ITexture* projectorTexture)
 		{
+			unsigned long currentInstance = this->mCurrentInstance;
+			
 			__asm
 			{
-				mov edi, this
+				mov edi, currentInstance
 				mov eax, dword ptr ds : [edi]
-
 				push projectorTexture
 				push edi
 				call dword ptr ds : [eax + 0x70]
 			}
 		}
+		
+	private:
+		unsigned long mCurrentInstance;
 	};
 };
 

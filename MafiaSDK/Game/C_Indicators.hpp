@@ -72,13 +72,13 @@ namespace MafiaSDK
 			}
 		}
 
-		void FadeInOutScreen(BOOL fadeScreen, int time)
+		void FadeInOutScreen(BOOL fadeScreen, int time, unsigned long color)
 		{
 			unsigned long funcAddress = C_Indicators_Enum::FunctionsAddresses::FadeInOut;
 
 			__asm
 			{
-				push 0
+				push color
 				push time
 				push fadeScreen
 				mov ecx, this

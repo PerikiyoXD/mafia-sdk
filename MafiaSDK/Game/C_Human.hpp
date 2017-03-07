@@ -99,6 +99,29 @@ namespace MafiaSDK
 			return reinterpret_cast<C_Human_Interface*>(this);
 		}
 
+		int Hit(int hitType, const Vector3D & unk1, const Vector3D & unk2, const Vector3D & unk3, float damage, MafiaSDK::C_Actor* atacker, unsigned long hittedPart, MafiaSDK::I3D_Frame* targetFrame)
+		{
+			unsigned long funcAddress = C_Human_Enum::FunctionsAddresses::Hit;
+			int returnVal = 0;
+
+			__asm
+			{
+				push targetFrame
+				push hittedPart
+				push atacker
+				push damage
+				push unk3
+				push unk2
+				push unk1
+				push hitType
+				mov ecx, this
+				call funcAddress
+				mov returnVal, eax
+			}
+			
+			return returnVal;
+		}
+
 		void SetBehavior(C_Human_Enum::BehaviorStates behavior)
 		{
 			/*__asm
@@ -213,7 +236,7 @@ namespace MafiaSDK
 			}
 		}
 
-		void Do_Shoot(BOOL fromCar, Vector3D vPos)
+		void Do_Shoot(BOOL isShooting, Vector3D vPos)
 		{
 			unsigned long funcAddress = C_Human_Enum::FunctionsAddresses::Do_Shoot;
 			
@@ -221,7 +244,7 @@ namespace MafiaSDK
 			{
 				lea eax, vPos
 				push eax
-				push fromCar
+				push isShooting
 				mov ecx, this
 				call funcAddress
 			}
@@ -371,6 +394,134 @@ namespace MafiaSDK
 
 			this->ChangeWeaponModel();
 		}
+	};
+
+	namespace C_Human_Hooks
+	{
+		inline void HookOnHumanHit(std::function<int(MafiaSDK::C_Human*, int, const Vector3D &, const Vector3D &, const Vector3D &, float, MafiaSDK::C_Actor*, unsigned long, MafiaSDK::I3D_Frame*)> funcitonPointer);
+
+#ifdef MAFIA_SDK_IMPLEMENTATION
+		namespace FunctionsPointers
+		{
+			std::function<int(MafiaSDK::C_Human*, int, const Vector3D &, const Vector3D &, const Vector3D &, float, MafiaSDK::C_Actor*, unsigned long, MafiaSDK::I3D_Frame*)> humanHit;
+			std::function<void(const Vector3D &)> humanShoot;
+		};
+
+		namespace Functions
+		{
+			inline int HumanHit(MafiaSDK::C_Human* thisInstance, int hitType, const Vector3D & unk1, const Vector3D & unk2, const Vector3D & unk3, float damage, MafiaSDK::C_Actor* atacker, unsigned long hittedPart, MafiaSDK::I3D_Frame* targetFrame)
+			{
+				if (FunctionsPointers::humanHit != nullptr)
+					return FunctionsPointers::humanHit(thisInstance, hitType, unk1, unk2, unk3, damage, atacker, hittedPart, targetFrame);
+
+				else return 0;
+			}
+
+			inline void HumanShoot(const Vector3D & position)
+			{
+				if (FunctionsPointers::humanShoot != nullptr)
+					FunctionsPointers::humanShoot(position);
+			}
+		};
+
+		namespace NakedFunctions
+		{
+			__declspec(naked) void HumanHitOne()
+			{
+				__asm
+				{
+					MOV EAX, DWORD PTR SS : [ESP + 0x30]
+					MOV ECX, DWORD PTR SS : [ESP + 0x2C]
+					MOV EDI, DWORD PTR SS : [ESP + 0x28]
+					MOV EDX, DWORD PTR SS : [ESP + 0x24]
+					PUSH EAX; / Arg8 = 00000001
+					MOV EAX, DWORD PTR SS : [ESP + 0x24]; |
+					PUSH ECX; | Arg7 = 000000CB
+					MOV ECX, DWORD PTR SS : [ESP + 0x24]; |
+					PUSH EDI; | Arg6 = 0C691FC8 ASCII "xXb"
+					PUSH EDX; | Arg5 = 00000000
+					MOV EDX, DWORD PTR SS : [ESP + 0x28]; |
+					PUSH EAX; | Arg4 = 00000001
+					MOV EAX, DWORD PTR SS : [ESP + 0x28]; |
+					PUSH ECX; | Arg3 = 000000CB
+					PUSH EDX; | Arg2 = 00000000
+					PUSH EAX; | Arg1 = 00000001
+					PUSH ESI
+					CALL Functions::HumanHit
+					ADD ESP, 0x24
+
+					MOV EAX, 0x00507F10
+					JMP EAX
+				}
+			}
+
+			__declspec(naked) void HumanHitTwo()
+			{
+				__asm
+				{
+					MOV EAX, DWORD PTR SS : [ESP + 0x24]
+					MOV ECX, DWORD PTR SS : [ESP + 0x20]
+					MOV EDX, DWORD PTR SS : [ESP + 0x1C]
+					PUSH EAX; / Arg8 = 00001001
+					MOV EAX, DWORD PTR SS : [ESP + 0x1C]; |
+					PUSH ECX; | Arg7 = 00001001
+					MOV ECX, DWORD PTR SS : [ESP + 0x1C]; |
+					PUSH EDX; | Arg6 = 00000000
+					MOV EDX, DWORD PTR SS : [ESP + 0x1C]; |
+					PUSH EAX; | Arg5 = 00001001
+					MOV EAX, DWORD PTR SS : [ESP + 0x1C]; |
+					PUSH ECX; | Arg4 = 00001001
+					MOV ECX, DWORD PTR SS : [ESP + 0x1C]; |
+					PUSH EDX; | Arg3 = 00000000
+					PUSH EAX; | Arg2 = 00001001
+					PUSH ECX; | Arg1 = 00001001
+					PUSH ESI
+					CALL Functions::HumanHit
+					ADD ESP, 0x24
+
+					MOV EAX, 0x0059425F
+					JMP EAX
+				}
+			}
+
+			__declspec(naked) void HumanShoot()
+			{
+				__asm
+				{
+					LEA ECX, DWORD PTR SS : [ESP + 0x38]
+
+					pushad
+						push ecx
+						call Functions::HumanShoot
+						add esp, 0x4
+					popad
+
+					PUSH ECX;
+					PUSH 1
+					MOV ECX, ESI
+					MOV EAX, 0x583590
+					CALL EAX
+
+					mov eax, 0x00591424
+					jmp eax
+				}	
+			}
+		};
+
+		inline void HookOnHumanHit(std::function<int(MafiaSDK::C_Human*, int, const Vector3D &, const Vector3D &, const Vector3D &, float, MafiaSDK::C_Actor*, unsigned long, MafiaSDK::I3D_Frame*)> functionPointer)
+		{
+			FunctionsPointers::humanHit = functionPointer;
+
+			MemoryPatcher::InstallJmpHook(0x00507EE1, (unsigned long)&NakedFunctions::HumanHitOne);
+			MemoryPatcher::InstallJmpHook(0x00594230, (unsigned long)&NakedFunctions::HumanHitTwo);
+		}
+
+		inline void HookOnHumanShoot(std::function<void(const Vector3D &)> functionPointer)
+		{
+			FunctionsPointers::humanShoot = functionPointer;
+			MemoryPatcher::InstallJmpHook(0x00591416, (unsigned long)&NakedFunctions::HumanShoot);
+		}
+#endif
 	};
 };
 

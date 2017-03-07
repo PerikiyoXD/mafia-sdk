@@ -1,17 +1,17 @@
-/*
-	Copyright 2017 Dávid Svitana
+ï»¿/*
+Copyright 2017 Dï¿½vid Svitana
 
-	Licensed under the Apache License, Version 2.0 (the "License");
-	you may not use this file except in compliance with the License.
-	You may obtain a copy of the License at
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
 
-	http://www.apache.org/licenses/LICENSE-2.0
+http://www.apache.org/licenses/LICENSE-2.0
 
-	Unless required by applicable law or agreed to in writing, software
-	distributed under the License is distributed on an "AS IS" BASIS,
-	WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-	See the License for the specific language governing permissions and
-	limitations under the License.
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
 */
 
 #ifndef _I3D_Frame_H_
@@ -21,13 +21,16 @@ namespace MafiaSDK
 {
 	struct I3D_Frame_Interface
 	{
-
+		PADDING(I3D_Frame_Interface, _pad0, 0x40);
+		Vector3D mPosition;
+		Vector3D mRotation;
 	};
 
 	namespace I3D_Frame_Enum
 	{
 		enum FunctionsAddresses
 		{
+			SetWorldPos = 0x1001B160,
 			CacheBlock = 0x647ED8,
 			CacheBlock_OpenModel = 0x647DD0,
 			CacheBlock_CreateModel = 0x4087E0,
@@ -61,6 +64,20 @@ namespace MafiaSDK
 			}
 		}
 
+		void SetWorldPos(const Vector3D & pos)
+		{
+			unsigned long funcAddr = I3D_Frame_Enum::FunctionsAddresses::SetWorldPos;
+
+			__asm
+			{
+				mov edi, this
+				push pos
+				//mov ecx, edi
+				push edi
+				call funcAddr
+			}
+		}
+
 		void LoadModel(const char* modelName)
 		{
 			unsigned long cacheBlockOpenModel = I3D_Frame_Enum::FunctionsAddresses::CacheBlock_OpenModel;
@@ -82,11 +99,12 @@ namespace MafiaSDK
 				test eax, eax
 				jnz CCache
 
-				sub esp, 0x4
+				//UpdateMatrix
+				mov ecx, dword ptr[esi]
+				push esi
+				call dword ptr[ecx + 18h]
 				CCache:
 			}
-
-			UpdateMatrix();
 		}
 
 		void UpdateMatrix()
@@ -207,7 +225,46 @@ namespace MafiaSDK
 				call dword ptr ds : [eax + 0x28]
 			}
 		}
+
+		I3D_Frame* FindChildFrame(const char* childFrameName)
+		{
+			__asm
+			{
+				mov edi, this
+
+				push 0x0FFFF
+				push childFrameName
+				push edi
+				mov ecx, dword ptr ds : [edi]
+				call dword ptr ds : [ecx + 0x38]
+			}
+		}
 	};
+
+	inline I3D_Frame* FindFrame(const char* frameName)
+	{
+		MafiaSDK::I3D_Frame* returnFrame = nullptr;
+
+		__asm
+		{
+			//Mission 
+			mov ecx, dword ptr ds : [0x63788C]
+
+			//->GetSomething
+			mov eax, dword ptr ds : [ecx + 0x10]
+
+			//Find Frame
+			mov ecx, dword ptr ds : [eax]
+			push 0x4FFFF
+			push frameName
+			push eax
+			call dword ptr ds : [ecx + 0x58]
+
+			mov returnFrame, eax
+		}
+
+		return returnFrame;
+	}
 }
 
 #endif

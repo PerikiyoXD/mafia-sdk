@@ -1,17 +1,17 @@
 /*
-	Copyright 2017 Dávid Svitana
+Copyright 2017 Dávid Svitana
 
-	Licensed under the Apache License, Version 2.0 (the "License");
-	you may not use this file except in compliance with the License.
-	You may obtain a copy of the License at
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
 
-	http://www.apache.org/licenses/LICENSE-2.0
+http://www.apache.org/licenses/LICENSE-2.0
 
-	Unless required by applicable law or agreed to in writing, software
-	distributed under the License is distributed on an "AS IS" BASIS,
-	WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-	See the License for the specific language governing permissions and
-	limitations under the License.
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
 */
 
 #ifndef _I3D_Light_H_
@@ -57,7 +57,7 @@ namespace MafiaSDK
 		{
 			unsigned long funcAddress = I3D_Light_Enum::FunctionsAddresses::Construct;
 			unsigned long funcLS3DAlloc = LS3D_Alloc;
-			
+
 			__asm
 			{
 				push 0x1F0
@@ -69,7 +69,7 @@ namespace MafiaSDK
 				mov this, eax
 			}
 		}
-		
+
 		~I3D_Light()
 		{
 			__asm
@@ -80,7 +80,7 @@ namespace MafiaSDK
 				call dword ptr ds : [eax + 0x40]
 			}
 		}
-		
+
 		void SetLightType(int lightType)
 		{
 			__asm
@@ -104,7 +104,7 @@ namespace MafiaSDK
 				call dword ptr ds : [eax + 0x58]
 			}
 		}
-		
+
 		void SetPower(float lightPower)
 		{
 			__asm
@@ -141,7 +141,7 @@ namespace MafiaSDK
 				call dword ptr ds : [eax + 0x64]
 			}
 		}
-		
+
 		void SetCone(float unk1, float unk2)
 		{
 			__asm
