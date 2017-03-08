@@ -133,6 +133,11 @@ namespace MafiaSDK
 			*(byte*)(this + 0x5FC) = behavior;
 		}
 
+		void SetShooting(float shooting)
+		{
+			*(byte*)(this + 0x628) = shooting;
+		}
+
 		void Intern_UseCar(C_Car* car, int seatID)
 		{
 			unsigned long funcAddress = C_Human_Enum::FunctionsAddresses::Intern_UseCar;
@@ -236,14 +241,13 @@ namespace MafiaSDK
 			}
 		}
 
-		void Do_Shoot(BOOL isShooting, Vector3D vPos)
+		void Do_Shoot(bool isShooting, Vector3D * vPos)
 		{
 			unsigned long funcAddress = C_Human_Enum::FunctionsAddresses::Do_Shoot;
 			
 			__asm
 			{
-				lea eax, vPos
-				push eax
+				push vPos
 				push isShooting
 				mov ecx, this
 				call funcAddress
@@ -405,6 +409,7 @@ namespace MafiaSDK
 		{
 			std::function<int(MafiaSDK::C_Human*, int, const Vector3D &, const Vector3D &, const Vector3D &, float, MafiaSDK::C_Actor*, unsigned long, MafiaSDK::I3D_Frame*)> humanHit;
 			std::function<void(const Vector3D &)> humanShoot;
+			std::function<void(MafiaSDK::C_Human*, byte)> humanDoWeaponChange;
 		};
 
 		namespace Functions
@@ -421,6 +426,14 @@ namespace MafiaSDK
 			{
 				if (FunctionsPointers::humanShoot != nullptr)
 					FunctionsPointers::humanShoot(position);
+			}
+
+			inline void HumanDoWeaponChange(MafiaSDK::C_Human* thisInstance, byte weaponId)
+			{
+				if (FunctionsPointers::humanDoWeaponChange != nullptr)
+				{
+					FunctionsPointers::humanDoWeaponChange(thisInstance, weaponId);
+				}
 			}
 		};
 
@@ -506,6 +519,53 @@ namespace MafiaSDK
 					jmp eax
 				}	
 			}
+
+			__declspec(naked) void HumanDoWeaponChangeOne()
+			{
+				__asm
+				{
+					PUSH ECX; / Arg2 = 00000000
+					PUSH EBP; | Arg1 = 00000000
+					MOV ECX, ESI; |
+					MOV EAX, 0x0057F550; \Game.0057F550
+					CALL EAX
+
+					pushad
+						mov ax, word ptr ds : [esi + 0x4A0]
+						push ax
+						push esi
+						call Functions::HumanDoWeaponChange
+						add esp, 0x6
+					popad
+
+					MOV EAX, 0x005903F6
+					JMP EAX
+				}
+			}
+
+
+			__declspec(naked) void HumanDoWeaponChangeTwo()
+			{
+				__asm
+				{
+					PUSH ECX; / Arg2 = 00000000
+					PUSH EBP; | Arg1 = 00000000
+					MOV ECX, ESI; |
+					MOV EAX, 0x0057F550; \Game.0057F550
+					CALL EAX
+
+					pushad
+						mov ax, word ptr ds : [esi + 0x4A0]
+						push ax
+						push esi
+						call Functions::HumanDoWeaponChange
+						add esp, 0x6
+					popad
+
+					MOV EAX, 0x00590303 
+					JMP EAX
+				}
+			}
 		};
 
 		inline void HookOnHumanHit(std::function<int(MafiaSDK::C_Human*, int, const Vector3D &, const Vector3D &, const Vector3D &, float, MafiaSDK::C_Actor*, unsigned long, MafiaSDK::I3D_Frame*)> functionPointer)
@@ -520,6 +580,14 @@ namespace MafiaSDK
 		{
 			FunctionsPointers::humanShoot = functionPointer;
 			MemoryPatcher::InstallJmpHook(0x00591416, (unsigned long)&NakedFunctions::HumanShoot);
+		}
+
+		inline void HookHumanDoWeaponChange(std::function<void(MafiaSDK::C_Human* thisInstance, byte weaponId)> functionPointer)
+		{
+			FunctionsPointers::humanDoWeaponChange = functionPointer;
+
+			MemoryPatcher::InstallJmpHook(0x005903ED, (unsigned long)&NakedFunctions::HumanDoWeaponChangeOne);
+			MemoryPatcher::InstallJmpHook(0x005902FA, (unsigned long)&NakedFunctions::HumanDoWeaponChangeTwo);
 		}
 #endif
 	};
