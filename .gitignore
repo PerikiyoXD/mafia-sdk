@@ -10,9 +10,12 @@ bld/
 [Bb]in/
 [Oo]bj/
 [Ll]og/
+Win32/
 .vs/
 *.suo
 *.VC.db
 *.vcxproj.filters
 *.VC.VC.opendb
 *.user
+*.dir/
+build/
